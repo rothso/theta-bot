@@ -4,11 +4,13 @@
   "description": "Discord Bot for the Computer Science Royals server",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Rothanak So",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^11.4.2"
+    "discord.js": "^11.4.2",
+    "dotenv": "^8.0.0"
   }
 }

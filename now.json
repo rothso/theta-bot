@@ -1,0 +1,5 @@
+{
+  "version": 1,
+  "alias": "elfayoubot.now.sh",
+  "dotenv": ".env.production"
+}
