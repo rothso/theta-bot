@@ -13,8 +13,12 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-  if (msg.content === 'ping') {
+  if (msg.content.toLowerCase() === 'ping') {
     msg.reply('pong!');
+  } else if (msg.content.toLowerCase() === 'marco') {
+    msg.reply('polo!');
+  } else if (msg.content.match(/if she breathes/i)) {
+    msg.channel.send('... she a bot.');
   }
 });
 
