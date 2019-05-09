@@ -1,10 +1,12 @@
 const Discord = require('discord.js');
+const http = require('http');
 const dotenv = require('dotenv');
 dotenv.config();
 
 const client = new Discord.Client();
 
 const TOKEN = process.env.TOKEN;
+const PORT = 3000;
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -34,4 +36,10 @@ client.on('guildCreate', guild => {
   channel.send(`Hello world!`);
 });
 
-require('http').createServer().listen(3000)
+const server = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  res.end('Hello World\n');
+});
+
+server.listen(PORT);
