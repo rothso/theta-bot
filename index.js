@@ -17,8 +17,13 @@ client.on('message', msg => {
     msg.reply('pong!');
   } else if (msg.content.toLowerCase() === 'marco') {
     msg.reply('polo!');
-  } else if (match = msg.content.match(/if (she|he) breathes/i)) {
-    msg.channel.send(`... ${match[1]} a bot.`);
+  } else if (match = msg.content.match(/if (she|he|\w+) breathe(s)?/i)) {
+    let noun = match[1];
+    if (noun === 'he' || noun === 'she') {
+      msg.channel.send(`... ${noun} a bot.`);
+    } else {
+      msg.channel.send('I\'m only a bot, I can\'t tell gender :(');
+    }
   }
 });
 
