@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const http = require('http');
 const dotenv = require('dotenv');
+const tldr = require('./tldr');
 dotenv.config();
 
 const client = new Discord.Client();
@@ -52,3 +53,8 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT);
+
+// For deployment testing purposes
+tldr.getPage('tar')
+  .then(content => console.log(content))
+  .catch((error) => console.log(error));
