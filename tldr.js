@@ -13,7 +13,7 @@ exports.getPage = (command) => {
 };
 
 exports.getEmbed = (command) => {
-  return this.getPage(command)
+  return this.getPage(command.split(/\s+/).join('-'))
     .then(page => toEmbed(page))
     .catch(() => errorEmbed(command));
 };

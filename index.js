@@ -26,7 +26,7 @@ client.on('message', msg => {
     } else {
       msg.channel.send('I\'m only a bot, I can\'t tell gender :(');
     }
-  } else if (match = msg.content.match(/^\$ man (\w+)$/i)) {
+  } else if (match = msg.content.match(/^\$\s?man ([\w\s-]+)$/i)) {
     tldr.getEmbed(match[1])
       .then(embed => msg.channel.send(embed))
       .catch(error => console.log(error));
