@@ -2,12 +2,13 @@ const Discord = require('discord.js');
 const http = require('http');
 const dotenv = require('dotenv');
 const tldr = require('./tldr');
+
 dotenv.config();
-
-const client = new Discord.Client();
-
 const TOKEN = process.env.TOKEN;
 const PORT = 3000;
+
+const client = new Discord.Client();
+client.login(TOKEN);
 
 client.on('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
@@ -25,10 +26,12 @@ client.on('message', msg => {
     } else {
       msg.channel.send('I\'m only a bot, I can\'t tell gender :(');
     }
+  } else if (match = msg.content.match(/^\$ man (\w+)$/i)) {
+    tldr.getEmbed(match[1])
+      .then(embed => msg.channel.send(embed))
+      .catch(error => console.log(error));
   }
 });
-
-client.login(TOKEN);
 
 client.on('guildCreate', guild => {
   let channelID;
@@ -53,8 +56,3 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT);
-
-// For deployment testing purposes
-tldr.getPage('tar')
-  .then(content => console.log(content))
-  .catch((error) => console.log(error));
