@@ -4,23 +4,25 @@ const dotenv = require('dotenv');
 const tldr = require('./tldr');
 
 dotenv.config();
-const TOKEN = process.env.TOKEN;
+
+const { TOKEN } = process.env;
 const PORT = 3000;
 
 const client = new Discord.Client();
 client.login(TOKEN);
 
 client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', msg => {
+client.on('message', (msg) => {
+  let match;
   if (msg.content.toLowerCase() === 'ping') {
     msg.reply('pong!');
   } else if (msg.content.toLowerCase() === 'marco') {
     msg.reply('polo!');
   } else if (match = msg.content.match(/if (she|he|\w+) breathe(s)?/i)) {
-    let noun = match[1];
+    const noun = match[1];
     if (noun === 'he' || noun === 'she') {
       msg.channel.send(`... ${noun} a bot.`);
     } else {
@@ -33,20 +35,11 @@ client.on('message', msg => {
   }
 });
 
-client.on('guildCreate', guild => {
-  let channelID;
-  let channels = guild.channels;
-  channelLoop:
-  for (let c of channels) {
-      let channelType = c[1].type;
-      if (channelType === "text") {
-          channelID = c[0];
-          break channelLoop;
-      }
-  }
-
-  let channel = client.channels.get(guild.systemChannelID || channelID);
-  channel.send(`Hello world!`);
+client.on('guildCreate', (guild) => {
+  const { channels } = guild;
+  const channelID = channels.find(channel => channel[1].type === 'text')[0];
+  const channel = client.channels.get(guild.systemChannelID || channelID);
+  channel.send('Hello world!');
 });
 
 const server = http.createServer((req, res) => {
