@@ -1,7 +1,7 @@
 const cache = require('tldr/lib/cache');
 const parser = require('tldr/lib/parser');
 
-const IMAGE_LOGO = 'https://media.discordapp.net/attachments/489175239830536206/576869532652535818/518713.png';
+const IMAGE_LOGO = 'https://cdn.discordapp.com/attachments/489175239830536206/579742025604268058/linux.png';
 const IMAGE_FOOTER = 'https://media.discordapp.net/attachments/489175239830536206/576869509143592990/favicon.png';
 
 // Download the tldr pages locally when the bot first runs
