@@ -35,11 +35,19 @@ client.on('message', (msg) => {
   }
 });
 
-client.on('guildCreate', (guild) => {
+const getDefaultChannel = (guild) => {
   const { channels } = guild;
-  const channelID = channels.find(channel => channel[1].type === 'text')[0];
-  const channel = client.channels.get(guild.systemChannelID || channelID);
-  channel.send('Hello world!');
+  const channelID = channels.find(channel => channel.type === 'text').id;
+  return client.channels.get(guild.systemChannelID || channelID);
+};
+
+client.on('guildCreate', (guild) => {
+  getDefaultChannel(guild).send('Hello world!');
+});
+
+client.on('guildMemberAdd', (member) => {
+  const message = `✨ **Welcome to Computer Science Royals, ${member.user.username}**\nWe're a student-run community of CS, IT, IS, and ISc students at UNF. If you get stuck on a project or have any questions, both in or out of class, feel free to ask around in <#456241057966063639>, <#546219353092259870>, and the Office Hours channels. To get situated, change your nickname to your first name and list any Summer B classes you're taking in <#532062406252429312>. Make yourself at home, and thanks for joining! <:swoop:593878676219887627>`;
+  getDefaultChannel(member.guild).send(message);
 });
 
 const server = http.createServer((req, res) => {
