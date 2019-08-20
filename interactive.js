@@ -21,10 +21,10 @@ const FuzzySet = require('fuzzyset.js');
 
 /*
 [ 'Linear Algebra',
-  'Intro to C',
   'Computer Science I',
   'Intro to OOP',
   'Comp Structures',
+  'Intro to C#',
   'Computer Science II',
   'Automata',
   'Hardware',
@@ -55,9 +55,36 @@ client.on('ready', () => {
   const end = allRoles.findIndex((role) => role.name === 'Compilers');
   const classRoles = allRoles.slice(start, end + 1);
 
+  // "Intro to " will be dropped from messages
+  const aliases = {
+    'Visual and Procedural Programming': 'Intro to C#',
+    'Programming 1': 'Computer Science I',
+    'Programming 2': 'Computer Science II',
+    'Computer Science 1': 'Computer Science I',
+    'Computer Science 2': 'Computer Science II',
+    CS1: 'Computer Science I',
+    CS2: 'Computer Science II',
+    OOP: 'Intro to OOP',
+    'Object-Oriented Programming': 'Intro to OOP',
+    'Computational Structures': 'Comp Structures',
+    'Computability and Automata': 'Automata',
+    'Hardware Lab': 'Hardware',
+    'Computer Security': 'Security',
+    'Web Systems Development': 'Web Systems',
+    'DS OOP': 'Data Structures OOP',
+    DS: 'Data Structures',
+    'Legal and Ethical': 'Legal & Ethical',
+    'Computer Networks': 'Networks',
+    'Computer Networks and Distributed Processing': 'Networks',
+    IP: 'Internet Programming',
+    IDS: 'Intrusion Detection',
+    AI: 'Artificial Intelligence',
+    OS: 'Operating Systems',
+    'OS Environments': 'Operating Systems',
+    'Language Translators': 'Compilers',
+  };
+
   // Build our fuzzyset
   const roleNames = classRoles.map((it) => it.name);
-  const roleSet = FuzzySet(roleNames);
-
-  console.log(roleNames);
+  const roleSet = FuzzySet([...roleNames, ...Object.keys(aliases)]);
 });
