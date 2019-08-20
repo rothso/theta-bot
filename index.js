@@ -21,6 +21,7 @@ client.on('message', (msg) => {
     msg.reply('pong!');
   } else if (msg.content.toLowerCase() === 'marco') {
     msg.reply('polo!');
+  // eslint-disable-next-line no-cond-assign
   } else if (match = msg.content.match(/if (she|he|\w+) breathe(s)?/i)) {
     const noun = match[1];
     if (noun === 'he' || noun === 'she') {
@@ -28,6 +29,7 @@ client.on('message', (msg) => {
     } else {
       msg.channel.send('I\'m only a bot, I can\'t tell gender :(');
     }
+  // eslint-disable-next-line no-cond-assign
   } else if (match = msg.content.match(/^\$\s?man ([\w\s-]+)$/i)) {
     tldr.getEmbed(match[1])
       .then(embed => msg.channel.send(embed))
@@ -37,7 +39,7 @@ client.on('message', (msg) => {
 
 const getDefaultChannel = (guild) => {
   const { channels } = guild;
-  const channelID = channels.find(channel => channel.type === 'text').id;
+  const channelID = channels.find((channel) => channel.type === 'text').id;
   return client.channels.get(guild.systemChannelID || channelID);
 };
 
