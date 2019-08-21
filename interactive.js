@@ -68,6 +68,8 @@ client.on('ready', () => {
     'Programming 2': 'Computer Science II',
     'Computer Science 1': 'Computer Science I',
     'Computer Science 2': 'Computer Science II',
+    'Compsci 1': 'Computer Science I',
+    'Compsci 2': 'Computer Science II',
     CS1: 'Computer Science I',
     CS2: 'Computer Science II',
     OOP: 'Intro to OOP',
@@ -85,6 +87,7 @@ client.on('ready', () => {
     'Computer Networks and Distributed Processing': 'Networks',
     IP: 'Internet Programming',
     'Design and Analysis of Algorithms': 'Algorithms',
+    'Analysis of Algorithms': 'Algorithms',
     IDS: 'Intrusion Detection',
     AI: 'Artificial Intelligence',
     OS: 'Operating Systems',
@@ -100,12 +103,10 @@ client.on('ready', () => {
   const roleSet = FuzzySet([...roleNames, ...Object.keys(aliases)]);
 
   // Threshold
-  const threshold = 0.5;
-
-  const orphans = [];
+  const threshold = 0.7;
 
   client.channels.get(CHANNEL_ROLEASSIGN)
-    .fetchMessages()
+    .fetchMessages({ limit: 100 })
     .then((messages) => messages
       .filter((msg) => !msg.member.roles.find((role) => role.name === 'Admin!'))
       .forEach((msg) => {
@@ -114,32 +115,34 @@ client.on('ready', () => {
           .replace(/<[^)]*>/g, '') // Remove anything between angle brackets
           .split(/[.,+\n]/)
           .map((str) => str
+            .replace(/Intro(?:duction)? to/i, '') // Drop "Intro to "
             .trim()
-            .replace(/^Intro(?:duction)? to/i, ''))
+            .replace(/^and /i, '')) // Remove "and" at the start of a phrase
           .filter(Boolean);
 
-        console.log(`${chalk.hex(msg.member.displayHexColor).bold(msg.member.displayName)}: ${msg.content}`);
-
-        courses.forEach((course) => {
+        const discordRoles = courses.map((course) => {
           const fuzzyMatches = roleSet.get(course) || [];
+          const best = fuzzyMatches.find((match, i) => i === 0 && match[0] >= threshold);
 
-          if (fuzzyMatches.filter((match) => match[0] >= threshold).length) {
-            fuzzyMatches.forEach((match, i) => {
-              const [confidence, role] = match;
-              const roleChalk = confidence >= threshold && i === 0
-                ? chalk.green
-                : chalk.white;
-
-              console.log(`  ${roleChalk(role)} ${chalk.gray(confidence)}`);
-            });
-          } else {
-            orphans.push(course);
+          if (!best) {
+            return [0, course]; // if no match, return confidence of 0
           }
+
+          // Undo the alias to get the underlying official role name
+          const [confidence, name] = best;
+          const roleName = aliases[name] || name;
+          return [confidence, classRoles.find((role) => role.name === roleName)];
         });
 
-        console.log('\n');
-      }))
-    .then(() => {
-      console.log(orphans);
-    });
+        const orphans = discordRoles.filter(([confidence]) => confidence === 0);
+        const matches = discordRoles.filter(([confidence]) => confidence !== 0);
+
+        // Display output
+        const content = orphans.reduce((acc, [, course]) => acc.replace(course, `${chalk.red(course)}`), msg.content);
+        console.log(`${chalk.hex(msg.member.displayHexColor).bold(msg.member.displayName)}: ${content}`);
+        matches.forEach(([confidence, role]) => {
+          console.log(`  ${chalk.hex(role.hexColor)(role.name)} ${chalk.gray(confidence)}`);
+        });
+        console.log('');
+      }));
 });
