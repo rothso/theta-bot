@@ -21,36 +21,6 @@ const CHANNEL_ROLEASSIGN = '532062406252429312';
 
 const FuzzySet = require('fuzzyset.js');
 
-/*
-[ 'Linear Algebra',
-  'Statistics',
-  'Computer Science I',
-  'Intro to OOP',
-  'Comp Structures',
-  'Intro to C#',
-  'Computer Science II',
-  'Automata',
-  'Hardware',
-  'Computer Security',
-  'Web Systems',
-  'Data Structures OOP',
-  'Data Structures',
-  'IT Project Management',
-  'Systems Admin',
-  'Legal & Ethical',
-  'Networks',
-  'Algorithms',
-  'Internet Programming',
-  'System Software',
-  'Game Development',
-  'Intrusion Detection',
-  'Artificial Intelligence',
-  'Operating Systems',
-  'Databases',
-  'Software Engineering',
-  'Compilers' ]
-*/
-
 client.on('ready', () => {
   const { roles } = client.guilds.get(SERVER);
 
@@ -79,6 +49,7 @@ client.on('ready', () => {
     'Computability and Automata': 'Automata',
     'Hardware Lab': 'Hardware',
     Security: 'Computer Security',
+    'Computer Forensics': 'Forensics',
     'Web Systems Development': 'Web Systems',
     'DS OOP': 'Data Structures OOP',
     DS: 'Data Structures',
@@ -89,6 +60,7 @@ client.on('ready', () => {
     'Design and Analysis of Algorithms': 'Algorithms',
     'Analysis of Algorithms': 'Algorithms',
     IDS: 'Intrusion Detection',
+    'Network Security and Management': 'Network Security',
     AI: 'Artificial Intelligence',
     OS: 'Operating Systems',
     'OS Environments': 'Operating Systems',
@@ -104,6 +76,8 @@ client.on('ready', () => {
 
   // Threshold
   const threshold = 0.7;
+
+  const roleFrequencies = {};
 
   client.channels.get(CHANNEL_ROLEASSIGN)
     .fetchMessages({ limit: 100 })
@@ -141,8 +115,18 @@ client.on('ready', () => {
         const content = orphans.reduce((acc, [, course]) => acc.replace(course, `${chalk.red(course)}`), msg.content);
         console.log(`${chalk.hex(msg.member.displayHexColor).bold(msg.member.displayName)}: ${content}`);
         matches.forEach(([confidence, role]) => {
+          roleFrequencies[role.name] = roleFrequencies.hasOwnProperty(role.name)
+            ? roleFrequencies[role.name] + 1
+            : 1;
+
           console.log(`  ${chalk.hex(role.hexColor)(role.name)} ${chalk.gray(confidence)}`);
         });
         console.log('');
-      }));
+      }))
+    .then(() => {
+      // Show the frequency of each role (temporary)
+      const frequencies = Object.keys(roleFrequencies).map((key) => [key, roleFrequencies[key]]);
+      frequencies.sort((first, second) => second[1] - first[1]);
+      console.log(frequencies);
+    });
 });
