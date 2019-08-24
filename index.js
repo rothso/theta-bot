@@ -1,15 +1,11 @@
-const Discord = require('discord.js');
 const http = require('http');
-const dotenv = require('dotenv');
+const client = require('./lib/discord.js');
 const tldr = require('./tldr');
 
-dotenv.config();
+// Import roleassign behavior
+require('./scripts/roleassign.js');
 
-const { TOKEN } = process.env;
 const PORT = 3000;
-
-const client = new Discord.Client();
-client.login(TOKEN);
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -21,7 +17,7 @@ client.on('message', (msg) => {
     msg.reply('pong!');
   } else if (msg.content.toLowerCase() === 'marco') {
     msg.reply('polo!');
-  // eslint-disable-next-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
   } else if (match = msg.content.match(/if (she|he|\w+) breathe(s)?/i)) {
     const noun = match[1];
     if (noun === 'he' || noun === 'she') {
@@ -29,7 +25,7 @@ client.on('message', (msg) => {
     } else {
       msg.channel.send('I\'m only a bot, I can\'t tell gender :(');
     }
-  // eslint-disable-next-line no-cond-assign
+    // eslint-disable-next-line no-cond-assign
   } else if (match = msg.content.match(/^\$\s?man ([\w\s-]+)$/i)) {
     tldr.getEmbed(match[1])
       .then(embed => msg.channel.send(embed))
