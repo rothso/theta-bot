@@ -23,3 +23,8 @@ client.on('message', async (msg) => {
     await assignFromMessage(msg, classRoles);
   }
 });
+
+client.on('guildMemberAdd', (member) => {
+  // When a member joins, automatically tag them as "Unverified"
+  member.addRole('515944062113808404');
+});
