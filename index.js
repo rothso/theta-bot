@@ -1,6 +1,6 @@
 const http = require('http');
 const client = require('./lib/discord.js');
-const tldr = require('./tldr');
+const tldr = require('./lib/tldr');
 
 // Import roleassign behavior
 require('./scripts/roleassign.js');
@@ -28,8 +28,8 @@ client.on('message', (msg) => {
     // eslint-disable-next-line no-cond-assign
   } else if (match = msg.content.match(/^\$\s?man ([\w\s-]+)$/i)) {
     tldr.getEmbed(match[1])
-      .then(embed => msg.channel.send(embed))
-      .catch(error => console.log(error));
+      .then((embed) => msg.channel.send(embed))
+      .catch((error) => console.log(error));
   }
 });
 
