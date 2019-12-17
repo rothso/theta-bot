@@ -14,7 +14,8 @@
     "discord.js": "^11.5.1",
     "dotenv": "^8.1.0",
     "fuzzyset.js": "0.0.8",
-    "tldr": "^3.2.7"
+    "prompt-confirm": "^2.0.4",
+    "tldr": "^3.3.2"
   },
   "devDependencies": {
     "eslint": "^6.2.0",
