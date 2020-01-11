@@ -1,5 +1,14 @@
 {
   "version": 1,
   "alias": "elfayoubot.now.sh",
-  "dotenv": ".env.production"
+  "public": true,
+  "env": {
+    "TOKEN": "@discord-token"
+  },
+  "scale": {
+    "sfo1": {
+      "min": 1,
+      "max": 1
+    }
+  }
 }

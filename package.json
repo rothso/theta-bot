@@ -2,6 +2,7 @@
   "name": "elfayoubot",
   "version": "1.0.0",
   "description": "Discord Bot for the Computer Science Royals server",
+  "repository": "rothso/theta-bot",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -12,14 +13,14 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "discord.js": "^11.5.1",
-    "dotenv": "^8.1.0",
+    "dotenv": "^8.2.0",
     "fuzzyset.js": "0.0.8",
     "prompt-confirm": "^2.0.4",
-    "tldr": "^3.3.2"
+    "tldr": "3.2.7"
   },
   "devDependencies": {
-    "eslint": "^6.2.0",
+    "eslint": "^6.8.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.20.0"
   }
 }
