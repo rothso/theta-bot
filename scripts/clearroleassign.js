@@ -1,11 +1,11 @@
 /* eslint-disable no-await-in-loop */
-const Confirm = require('prompt-confirm');
+/* eslint-disable no-restricted-syntax */
 const client = require('../lib/discord.js');
 const constants = require('../lib/constants.js');
 
 const keepMessages = [
   '579692471144022017', // very first message with instructions
-  '656295739487551488', // recent message from Kyle, temporary
+  '706938864106995782', // recent gif message, temporary
 ];
 
 client.on('ready', async () => {
@@ -16,14 +16,11 @@ client.on('ready', async () => {
     const messages = await channel.fetchMessages({ limit: 100 });
 
     userMessages = messages.filter((msg) => !keepMessages.includes(msg.id));
-    userMessages.forEach((msg) => console.log(msg.id, msg.content.split('\n', 1)[0]));
 
-    const prompt = new Confirm('Delete these messages from the channel?');
-    const answer = await prompt.run();
-    if (answer) {
-      await Promise.all(userMessages.map((msg) => msg.delete()));
-    } else {
-      process.exit();
+    for (const msg of userMessages.array()) {
+      console.log(msg.id, msg.content.split('\n', 1)[0]);
+      await msg.delete();
+      await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-  } while (userMessages.size >= 2);
+  } while (userMessages.size >= keepMessages.length);
 });
