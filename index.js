@@ -1,4 +1,5 @@
 const http = require('http');
+const os = require('os');
 const client = require('./lib/discord.js');
 const tldr = require('./lib/tldr');
 
@@ -30,6 +31,29 @@ client.on('message', (msg) => {
     tldr.getEmbed(match[1])
       .then((embed) => msg.channel.send(embed))
       .catch((error) => console.log(error));
+  } else if (msg.content.toLowerCase() === '$ status') {
+    let icon;
+    if (process.env.GAE_APPLICATION) {
+      icon = 'https://enricoteterra.com/content/images/2020/01/Google-Cloud-icon.png';
+    } else if (os.platform() === 'linux') {
+      icon = 'https://cdn.discordapp.com/attachments/489175239830536206/579742025604268058/linux.png';
+    }
+
+    msg.channel.send({
+      embed: {
+        color: 38536,
+        description: `I'm running on ${os.type} ${os.release} ${os.arch}!`,
+        fields: [
+          { name: 'CPU Count', value: os.cpus().length, inline: true },
+          { name: 'Memory Usage', value: `${((os.freemem() / os.totalmem()) * 100).toFixed(2)}%`, inline: true },
+          { name: 'Uptime', value: new Date(1000 * process.uptime()).toISOString().substr(11, 8) },
+        ],
+        footer: {
+          ...(icon ? { icon_url: icon } : {}),
+          text: new Date().toLocaleString(),
+        },
+      },
+    });
   }
 });
 
