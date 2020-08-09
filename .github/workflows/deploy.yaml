@@ -17,6 +17,13 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@releases/v1
+        id: deployment
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: Production
+
       - name: Publish to GitHub Packages
         uses: docker/build-push-action@v1
         with:
@@ -36,13 +43,6 @@ jobs:
           repository: ${{ github.repository }}
           tags: latest
 
-      - name: Create GitHub deployment
-        uses: chrnorm/deployment-action@releases/v1
-        id: deployment
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          environment: Production
-
       - name: Set up gcloud CLI
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
@@ -55,7 +55,7 @@ jobs:
           gcloud compute instances update-container "$GCE_INSTANCE" \
             --zone "$GCE_INSTANCE_ZONE" \
             --container-image "docker.io/$GITHUB_REPOSITORY:latest" \
-            --container-env="TOKEN=${{ secrets.DISCORD_TOKEN }}"
+            --container-env="TOKEN=${{ secrets.DISCORD_TOKEN }},GIT_COMMIT_SHA=${{ github.sha	}}"
 
       - name: Update deployment status (success)
         uses: chrnorm/deployment-status@releases/v1
