@@ -1,5 +1,8 @@
+const dotenv = require('dotenv');
+const fs = require('fs');
 const http = require('http');
 const os = require('os');
+const util = require('util');
 const client = require('./lib/discord.js');
 const tldr = require('./lib/tldr');
 
@@ -12,7 +15,7 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', (msg) => {
+client.on('message', async (msg) => {
   let match;
   if (msg.content.toLowerCase() === 'ping') {
     msg.reply('pong!');
@@ -33,20 +36,25 @@ client.on('message', (msg) => {
       .catch((error) => console.log(error));
   } else if (msg.content.toLowerCase() === '$ status') {
     let icon;
-    if (process.env.GAE_APPLICATION) {
+    if (process.env.HOSTNAME) {
       icon = 'https://enricoteterra.com/content/images/2020/01/Google-Cloud-icon.png';
     } else if (os.platform() === 'linux') {
       icon = 'https://cdn.discordapp.com/attachments/489175239830536206/579742025604268058/linux.png';
     }
 
+    // Get the OS name for the status message
+    const readFile = util.promisify(fs.readFile);
+    const buf = await readFile('/etc/os-release');
+    const { PRETTY_NAME } = dotenv.parse(buf);
+
     msg.channel.send({
       embed: {
         color: 38536,
-        description: `I'm running on ${os.type} ${os.release} ${os.arch}!`,
+        description: `Hello from ${PRETTY_NAME} :wave:`,
         fields: [
-          { name: 'CPU Count', value: os.cpus().length, inline: true },
-          { name: 'Memory Usage', value: `${((os.freemem() / os.totalmem()) * 100).toFixed(2)}%`, inline: true },
-          { name: 'Uptime', value: new Date(1000 * process.uptime()).toISOString().substr(11, 8) },
+          { name: 'Memory', value: `${((os.freemem() / os.totalmem()) * 100).toFixed(2)}%`, inline: true },
+          { name: 'Uptime', value: new Date(1000 * process.uptime()).toISOString().substr(11, 8), inline: true },
+          { name: 'Build', value: process.env.GIT_COMMIT_SHA.substr(0, 7), inline: true }
         ],
         footer: {
           ...(icon ? { icon_url: icon } : {}),
