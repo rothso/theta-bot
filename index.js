@@ -15,6 +15,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
 });
 
+client.on('error', console.error);
+
 client.on('message', async (msg) => {
   let match;
   if (msg.content.toLowerCase() === 'ping') {
