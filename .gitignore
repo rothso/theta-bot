@@ -175,6 +175,13 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# yarn v2
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+.pnp.*
+
 # End of https://www.gitignore.io/api/node,intellij+all
 
 .env.*
