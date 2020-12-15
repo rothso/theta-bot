@@ -132,9 +132,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
-typings/
-
 # Optional npm cache directory
 .npm
 
@@ -185,5 +182,5 @@ typings/
 # End of https://www.gitignore.io/api/node,intellij+all
 
 .env.*
-scripts/interactive.js
-
+dist/
+src/scripts/
