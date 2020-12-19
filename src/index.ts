@@ -1,5 +1,6 @@
 import { Client, GuildMember, Message } from 'discord.js';
 import 'dotenv/config';
+import * as admin from './admin';
 import * as manpages from './manpages';
 import * as roleassign from './roleassign';
 import * as ping from './ping';
@@ -18,6 +19,7 @@ client.on('message', async (message: Message) => {
   await status.onMessage(message);
   await manpages.onMessage(message);
   await roleassign.onMessage(message);
+  await admin.onMessage(message);
 });
 
 client.on('guildMemberAdd', async (member: GuildMember) => {
