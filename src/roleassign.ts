@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { Client, GuildMember, Message, Role, TextChannel } from 'discord.js';
 import FuzzySet from 'fuzzyset';
 import { CHANNEL_ROLEASSIGN, CHANNEL_TESTING, SERVER } from './util/constants';
+import { getClassRoles } from './util/roles';
 
 const EMOJI_CHECK = '614865867854970890';
 const ROLE_SOC = '533358593974730764';
@@ -127,10 +128,7 @@ export const onReady = async (client: Client): Promise<void> => {
   const { channels, roles } = client.guilds.cache.get(SERVER);
 
   // Initialize list of class roles
-  const allRoles = Array.from(roles.cache.sort((a, b) => a.position - b.position).values());
-  const start = allRoles.findIndex((role) => role.name === 'Linear Algebra');
-  const end = allRoles.findIndex((role) => role.name === 'Compilers');
-  classRoles = allRoles.slice(start, end + 1);
+  classRoles = getClassRoles(roles.cache);
 
   const roleChannels = [
     channels.cache.get(CHANNEL_ROLEASSIGN) as TextChannel,
