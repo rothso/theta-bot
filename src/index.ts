@@ -1,6 +1,7 @@
 import { Client, GuildMember, Message } from 'discord.js';
 import 'dotenv/config';
 import * as admin from './admin';
+import * as interactive from './interactive';
 import * as manpages from './manpages';
 import * as roleassign from './roleassign';
 import * as ping from './ping';
@@ -12,6 +13,7 @@ const client = new Client();
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
   await roleassign.onReady(client);
+  await interactive.onReady(client);
 });
 
 client.on('message', async (message: Message) => {
