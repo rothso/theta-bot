@@ -183,4 +183,3 @@ jspm_packages/
 
 .env.*
 dist/
-src/scripts/
