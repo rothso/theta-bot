@@ -1,10 +1,11 @@
 import { Message, MessageEmbed, Permissions } from 'discord.js';
+import * as channels from './channels';
 import * as elmo from './elmo';
 import * as greatpurge from './greatpurge';
 
 export const onMessage = async (message: Message): Promise<void> => {
-  const { channel, client } = message;
-  const content = message.content.toLowerCase().trim();
+  const { channel } = message;
+  const content = message.content.trim();
   // eslint-disable-next-line prefer-destructuring
   const member = message.member;
 
@@ -19,7 +20,8 @@ export const onMessage = async (message: Message): Promise<void> => {
     }
 
     const command = content.substr('$ sudo '.length);
-    await elmo.onCommand(command, client);
-    await greatpurge.onCommand(command, client);
+    await elmo.onCommand(command, message);
+    await greatpurge.onCommand(command, message);
+    await channels.onCommand(command, message);
   }
 };

@@ -1,14 +1,14 @@
 /* eslint-disable no-await-in-loop */
-import { Client, Collection, Message, TextChannel } from 'discord.js';
+import { Collection, Message, TextChannel } from 'discord.js';
 import { CHANNEL_ROLEASSIGN } from '../util/constants';
 
 const keepMessages = [
   '579692471144022017', // very first message with instructions
 ];
 
-export const onCommand = async (command: string, client: Client): Promise<void> => {
+export const onCommand = async (command: string, message: Message): Promise<void> => {
   if (command === 'clear-roleassign') {
-    const channel = client.channels.cache.get(CHANNEL_ROLEASSIGN) as TextChannel;
+    const channel = message.client.channels.cache.get(CHANNEL_ROLEASSIGN) as TextChannel;
 
     // Unleash elmo
     const elmo = await channel.send(

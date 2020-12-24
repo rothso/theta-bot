@@ -16,6 +16,7 @@ module.exports = {
   "rules": {
     "no-console": "off",
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }]
+    "@typescript-eslint/no-misused-promises": ["error", { "checksVoidReturn": false }],
+    "@typescript-eslint/restrict-template-expressions": ["off"]
   }
 };

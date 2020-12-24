@@ -1,8 +1,7 @@
 import chalk from 'chalk';
 import { Client, GuildMember, Message, Role, TextChannel } from 'discord.js';
-import FuzzySet from 'fuzzyset';
 import { CHANNEL_ROLEASSIGN, CHANNEL_TESTING, SERVER } from './util/constants';
-import { getClassRoles } from './util/roles';
+import { getClassRoles, RoleSet } from './util/roles';
 
 const EMOJI_CHECK = '614865867854970890';
 const ROLE_SOC = '533358593974730764';
@@ -11,65 +10,9 @@ const ROLE_UNVERIFIED = '515944062113808404';
 
 let classRoles: Role[];
 
-// "Intro to " will be dropped from messages
-const aliases: Record<string, string> = {
-  Stats: 'Statistics',
-  'Visual and Procedural Programming': 'Intro to C#',
-  'Programming 1': 'Programming I',
-  'Programming 2': 'Programming II',
-  'Computer Science I': 'Programming I',
-  'Computer Science II': 'Programming II',
-  'Computer Science 1': 'Programming I',
-  'Computer Science 2': 'Programming II',
-  'Compsci 1': 'Programming I',
-  'Compsci 2': 'Programming II',
-  CS1: 'Programming I',
-  CS2: 'Programming II',
-  OOP: 'Intro to OOP',
-  'Object-Oriented Programming': 'Intro to OOP',
-  'Computational Structures': 'Comp Structures',
-  Automata: 'Theory of Computation',
-  Architecture: 'Computer Architecture',
-  'Architecture and Organization': 'Computer Architecture',
-  Hardware: 'Computer Architecture',
-  'Computer Lab': 'Computer Architecture',
-  Security: 'Computer Security',
-  'Computer Forensics': 'Forensics',
-  'Web Systems Development': 'Web Systems',
-  DS: 'Data Structures',
-  'Systems Administration': 'Systems Admin',
-  UI: 'User Interface Design',
-  'UI Design': 'User Interface Design',
-  'User Interface': 'User Interface Design',
-  'Legal and Ethical': 'Legal & Ethical',
-  'Computer Networks': 'Networks',
-  'Computer Networks and Distributed Processing': 'Networks',
-  IP: 'Internet Programming',
-  'Design and Analysis of Algorithms': 'Algorithms',
-  'Analysis of Algorithms': 'Algorithms',
-  IDS: 'Intrusion Detection',
-  'Web Dev': 'Web Dev Frameworks',
-  'Network Security and Management': 'Network Security',
-  ML: 'Machine Learning',
-  AI: 'Artificial Intelligence',
-  OS: 'Operating Systems',
-  'Ahuja OS': 'Operating Systems',
-  'OS Env': 'Operating Systems Env',
-  'OS Environments': 'Operating Systems Env',
-  'Littleton OS': 'Operating Systems Env',
-  'Operating Systems Environments and Administration': 'Operating Systems Env',
-  'Big Data': 'Databases',
-  'Data Modeling': 'Databases', // legacy course name
-  'Information Systems Senior Project': 'IS Senior Project',
-  'Language Translators': 'Compilers',
-};
-
-// Minimum match confidence for assigning a role
-const threshold = 0.7;
-
 const getMatchingRoles = (content: string): Role[] => {
   // Build our fuzzy set for matching
-  const roleSet = FuzzySet([...classRoles.map((it) => it.name), ...Object.keys(aliases)]);
+  const roleSet = new RoleSet(classRoles);
 
   const courses = content
     .replace(/\([^)]*\)/g, '') // Remove anything between parentheses
@@ -83,20 +26,7 @@ const getMatchingRoles = (content: string): Role[] => {
     ) // Remove "and" at the start of a phrase
     .filter(Boolean);
 
-  return courses.reduce((roles: Role[], course) => {
-    const fuzzyMatches = roleSet.get(course);
-
-    if (!fuzzyMatches || fuzzyMatches[0][0] < threshold) {
-      return roles; // if no match, return
-    }
-
-    // Undo the alias to get the underlying official role name
-    const [confidence, roleName] = fuzzyMatches[0];
-    const realRoleName = aliases[roleName] || roleName;
-    const newRole = classRoles.find((role) => role.name === realRoleName);
-
-    return confidence > 0 ? roles.concat(newRole) : roles;
-  }, []);
+  return courses.reduce((roles: Role[], course) => roles.concat(roleSet.get(course) || []), []);
 };
 
 const assignRole = async (message: Message): Promise<void> => {

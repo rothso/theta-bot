@@ -9,6 +9,20 @@
       "request": "launch",
       "name": "Launch Program",
       "runtimeExecutable": "yarn",
+      "runtimeArgs": ["start"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/dist/index.js",
+      "outFiles": [
+        "${workspaceFolder}/dist/**/*.js"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Program",
+      "runtimeExecutable": "yarn",
       "runtimeArgs": ["start:debug"],
       "skipFiles": [
         "<node_internals>/**"
