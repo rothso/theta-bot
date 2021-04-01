@@ -90,14 +90,14 @@ export const onCommand = async (command: string, message: Message): Promise<void
       missingRoles,
     } = await getStatistics(message.guild, term);
 
-    const channelsToKeepRoles = channelsToKeep.map((it) => it.role.name).join('\n');
-    const channelsToKeepNames = channelsToKeep.map((it) => it.channel).join('\n');
+    const channelsToKeepRoles = channelsToKeep.map((it) => it.role.name).join('\n') || '*None*';
+    const channelsToKeepNames = channelsToKeep.map((it) => it.channel).join('\n') || '\u200B';
     const channelsToHideRoles = channelsToHide.map((it) => it.role.name).join('\n') || '*None*';
     const channelsToHideNames = channelsToHide.map((it) => it.channel).join('\n') || '\u200B';
     const channelsToShowRoles = channelsToShow.map((it) => it.role.name).join('\n') || '*None*';
     const channelsToShowNames = channelsToShow.map((it) => it.channel).join('\n') || '\u200B';
-    const noChannels = missingChannels.map((role) => role.name).join('\n');
-    const noRoles = missingRoles.map((course) => course.title).join('\n');
+    const noChannels = missingChannels.map((role) => role.name).join('\n') || '*None*';
+    const noRoles = missingRoles.map((course) => course.title).join('\n') || '*None*' ;
 
     await message.channel.send(
       new MessageEmbed({

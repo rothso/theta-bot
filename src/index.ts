@@ -34,5 +34,9 @@ client.on('guildMemberRemove', async (member: GuildMember) => {
   await goodbye.onGuildMemberRemove(member);
 });
 
+process.on('unhandledRejection', (error) => {
+  console.error(error);
+});
+
 // Read the secret from the .env file and log in
-client.login(process.env.TOKEN).catch((err) => console.log(err));
+client.login(process.env.TOKEN).catch((err) => console.error(err));
