@@ -4,6 +4,7 @@ import FuzzySet from 'fuzzyset';
 // "Intro to " will be dropped from messages
 const roleAliases: Record<string, string> = {
   Stats: 'Statistics',
+  'Probability and Statistics for Engineers': 'Statistics',
   'Visual and Procedural Programming': 'Intro to C#',
   'Programming 1': 'Programming I',
   'Programming 2': 'Programming II',
