@@ -55,6 +55,7 @@ const roleAliases: Record<string, string> = {
   'OS Env': 'Operating Systems Env',
   'OS Environments': 'Operating Systems Env',
   'Littleton OS': 'Operating Systems Env',
+  'Operating System Environment': 'Operating Systems Env',
   'Operating Systems Environments and Administration': 'Operating Systems Env',
   'Big Data': 'Databases',
   'Data Modeling': 'Databases', // legacy course name
