@@ -12,9 +12,7 @@ export const onMessage = async (message: Message): Promise<void> => {
   } else {
     const [match, noun] = /if (she|he|\w+) breathe(s)?/i.exec(content) || [];
     if (match) {
-      const reply = ['he', 'she'].includes(noun)
-        ? `...${noun} a bot.`
-        : "I'm only a bot, I can't tell gender :(";
+      const reply = `...${noun} a bot.`;
       await message.channel.send(reply);
     }
   }
