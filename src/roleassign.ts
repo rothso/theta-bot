@@ -5,7 +5,6 @@ import { getClassRoles, RoleSet } from './util/roles';
 
 const EMOJI_CHECK = '614865867854970890';
 const ROLE_SOC = '533358593974730764';
-const ROLE_SOCIAL = '533358805480767489';
 const ROLE_UNVERIFIED = '515944062113808404';
 
 let classRoles: Role[];
@@ -49,7 +48,7 @@ const assignRole = async (message: Message): Promise<void> => {
   const roleFmt = newRoles.map((role) => chalk.hex(role.hexColor)(role.name)).join(', ');
   console.log(`Assigning to ${memberFmt} roles ${roleFmt}`);
 
-  await member.roles.add([...newRoles, ROLE_SOC, ROLE_SOCIAL]);
+  await member.roles.add([...newRoles, ROLE_SOC]);
   await member.roles.remove(ROLE_UNVERIFIED);
   await message.react(EMOJI_CHECK);
 };
