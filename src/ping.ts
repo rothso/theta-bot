@@ -10,7 +10,7 @@ export const onMessage = async (message: Message): Promise<void> => {
   } else if (content === 'marco') {
     await message.reply('polo!');
   } else {
-    const [match, noun] = /if (she|he|\w+) breathe(s)?/i.exec(content) || [];
+    const [match, noun] = /^if (she|he|\w+) breathe(s)?$/i.exec(content) || [];
     if (match) {
       const reply = ['he', 'she'].includes(noun)
         ? `...${noun} a bot.`
