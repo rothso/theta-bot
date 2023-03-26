@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 import config from 'tldr/lib/config';
 import Cache from 'tldr/lib/cache';
 import parser from 'tldr/lib/parser';
@@ -24,32 +24,36 @@ export const onMessage = async (message: Message): Promise<void> => {
   if (match) {
     try {
       const page = await getPage(command.split(/\s+/).join('-'));
-      await channel.send(
-        new MessageEmbed({
-          color: 3915205,
-          author: {
-            name: page.name,
-            icon_url: IMAGE_LOGO,
-          },
-          description: `*${page.description}*\n\u200B`,
-          fields: page.examples.map((ex) => ({
-            name: ex.description,
-            value: ex.code.replace(/{{(.*?)}}/g, '$1'),
-          })),
-          footer: {
-            icon_url: IMAGE_FOOTER,
-            text: 'TLDR Pages',
-          },
-        }),
-      );
+      await channel.send({
+        embeds: [
+          new EmbedBuilder({
+            color: 3915205,
+            author: {
+              name: page.name,
+              icon_url: IMAGE_LOGO,
+            },
+            description: `*${page.description}*\n\u200B`,
+            fields: page.examples.map((ex) => ({
+              name: ex.description,
+              value: ex.code.replace(/{{(.*?)}}/g, '$1'),
+            })),
+            footer: {
+              icon_url: IMAGE_FOOTER,
+              text: 'TLDR Pages',
+            },
+          }),
+        ],
+      });
     } catch (err) {
-      await channel.send(
-        new MessageEmbed({
-          description:
-            `:no_entry_sign: Error: There is no TLDR page for **${command}**. ` +
-            `Try running \`man ${command}\` in a Linux terminal.`,
-        }),
-      );
+      await channel.send({
+        embeds: [
+          new EmbedBuilder({
+            description:
+              `:no_entry_sign: Error: There is no TLDR page for **${command}**. ` +
+              `Try running \`man ${command}\` in a Linux terminal.`,
+          }),
+        ],
+      });
     }
   }
 };

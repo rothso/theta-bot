@@ -13,8 +13,7 @@ export const onCommand = async (command: string, message: Message): Promise<void
       allMembers.map(async (member) => {
         // Find any class roles on the member
         const removableRoles = member.roles.cache
-          .filter((role) => classRoles.includes(role))
-          .array();
+          .filter((role) => classRoles.includes(role));
 
         // Remove the roles
         await member.roles.remove(removableRoles);
@@ -27,3 +26,4 @@ export const onCommand = async (command: string, message: Message): Promise<void
     );
   }
 };
+

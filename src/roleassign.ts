@@ -68,7 +68,7 @@ export const onReady = async (client: Client): Promise<void> => {
   await Promise.all(
     roleChannels.map((channel) =>
       channel.messages
-        .fetch({ limit: 100 }, true, true)
+        .fetch({ limit: 100, cache: true })
         .then((messages) => Promise.all(messages.map((message) => assignRole(message)))),
     ),
   );

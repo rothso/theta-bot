@@ -1,5 +1,5 @@
 import { BigQuery } from '@google-cloud/bigquery';
-import { Guild, Message, MessageEmbed } from 'discord.js';
+import { Guild, Message, EmbedBuilder } from 'discord.js';
 import memoizee from 'memoizee';
 import { getClassRoles, RoleSet } from '../util/roles';
 
@@ -82,13 +82,8 @@ export const onCommand = async (command: string, message: Message): Promise<void
   if (!match) return;
 
   if (cmd === 'channels' && subcommand === 'status' && term) {
-    const {
-      channelsToKeep,
-      channelsToHide,
-      channelsToShow,
-      missingChannels,
-      missingRoles,
-    } = await getStatistics(message.guild, term);
+    const { channelsToKeep, channelsToHide, channelsToShow, missingChannels, missingRoles } =
+      await getStatistics(message.guild, term);
 
     const channelsToKeepRoles = channelsToKeep.map((it) => it.role.name).join('\n') || '*None*';
     const channelsToKeepNames = channelsToKeep.map((it) => it.channel).join('\n') || '\u200B';
@@ -97,30 +92,32 @@ export const onCommand = async (command: string, message: Message): Promise<void
     const channelsToShowRoles = channelsToShow.map((it) => it.role.name).join('\n') || '*None*';
     const channelsToShowNames = channelsToShow.map((it) => it.channel).join('\n') || '\u200B';
     const noChannels = missingChannels.map((role) => role.name).join('\n') || '*None*';
-    const noRoles = missingRoles.map((course) => course.title).join('\n') || '*None*' ;
+    const noRoles = missingRoles.map((course) => course.title).join('\n') || '*None*';
 
-    await message.channel.send(
-      new MessageEmbed({
-        title: `🪄  Server Mode: ${term}`,
-        description:
-          `Run \`sudo channels synchronize "${term}"\` to synchronize Office Hours.\n` +
-          'Run `sudo channels up <channel>` to activate a class channel.\n' +
-          'Run `sudo channels down <channel>` to deactivate a class channel.',
-        fields: [
-          { name: 'Channels to Keep', value: channelsToKeepRoles },
-          { name: '\u200B', value: '\u200B' },
-          { name: '\u200B', value: channelsToKeepNames },
-          { name: 'Channels to Deactivate', value: channelsToHideRoles },
-          { name: '\u200B', value: '\u200B' },
-          { name: '\u200B', value: channelsToHideNames },
-          { name: 'Channels to Activate', value: channelsToShowRoles },
-          { name: '\u200B', value: '\u200B' },
-          { name: '\u200B', value: channelsToShowNames },
-          { name: 'Missing Channels', value: noChannels },
-          { name: '\u200B', value: '\u200B' },
-          { name: 'Missing Roles', value: noRoles },
-        ].map((field) => ({ ...field, inline: true })),
-      }),
-    );
+    await message.channel.send({
+      embeds: [
+        new EmbedBuilder({
+          title: `🪄  Server Mode: ${term}`,
+          description:
+            `Run \`sudo channels synchronize "${term}"\` to synchronize Office Hours.\n` +
+            'Run `sudo channels up <channel>` to activate a class channel.\n' +
+            'Run `sudo channels down <channel>` to deactivate a class channel.',
+          fields: [
+            { name: 'Channels to Keep', value: channelsToKeepRoles },
+            { name: '\u200B', value: '\u200B' },
+            { name: '\u200B', value: channelsToKeepNames },
+            { name: 'Channels to Deactivate', value: channelsToHideRoles },
+            { name: '\u200B', value: '\u200B' },
+            { name: '\u200B', value: channelsToHideNames },
+            { name: 'Channels to Activate', value: channelsToShowRoles },
+            { name: '\u200B', value: '\u200B' },
+            { name: '\u200B', value: channelsToShowNames },
+            { name: 'Missing Channels', value: noChannels },
+            { name: '\u200B', value: '\u200B' },
+            { name: 'Missing Roles', value: noRoles },
+          ].map((field) => ({ ...field, inline: true })),
+        }),
+      ],
+    });
   }
 };

@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, Permissions } from 'discord.js';
+import { Message, EmbedBuilder, PermissionsBitField } from 'discord.js';
 import * as channels from './channels';
 import * as elmo from './elmo';
 import * as greatpurge from './greatpurge';
@@ -10,16 +10,18 @@ export const onMessage = async (message: Message): Promise<void> => {
   const member = message.member;
 
   if (content.startsWith('$ sudo ')) {
-    if (!member.hasPermission(Permissions.FLAGS.ADMINISTRATOR)) {
-      await channel.send(
-        new MessageEmbed({
-          description: `${member.user.username} is not in the sudoers file. This incident will be reported.`,
-        }),
-      );
+    if (!member.permissions.has(PermissionsBitField.Flags.Administrator)) {
+      await channel.send({
+        embeds: [
+          new EmbedBuilder({
+            description: `${member.user.username} is not in the sudoers file. This incident will be reported.`,
+          }),
+        ],
+      });
       return;
     }
 
-    const command = content.substr('$ sudo '.length);
+    const command = content.substring('$ sudo '.length);
     await elmo.onCommand(command, message);
     await greatpurge.onCommand(command, message);
     await channels.onCommand(command, message);

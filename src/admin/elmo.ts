@@ -1,5 +1,6 @@
 /* eslint-disable no-await-in-loop */
 import { Collection, Message, TextChannel } from 'discord.js';
+import { setTimeout } from 'timers/promises';
 import { CHANNEL_ROLEASSIGN } from '../util/constants';
 
 const keepMessages = [
@@ -28,8 +29,9 @@ export const onCommand = async (command: string, message: Message): Promise<void
           .filter((msg) => !keepMessages.includes(msg.id))
           .map((msg) =>
             msg
-              .delete({ timeout: 1000 })
-              .then(() => console.log(`Deleted: ${msg.content.split('\n', 1)[0]}`)),
+              .delete()
+              .then(() => console.log(`Deleted: ${msg.content.split('\n', 1)[0]}`))
+              .then(() => setTimeout(1000)),
           ),
       );
     } while (messages.size > keepMessages.length);

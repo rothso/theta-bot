@@ -1,4 +1,4 @@
-import { Client, GuildMember, Message } from 'discord.js';
+import { Client, GatewayIntentBits, GuildMember, Message } from 'discord.js';
 import 'dotenv/config';
 import * as admin from './admin';
 import * as goodbye from './goodbye';
@@ -9,7 +9,14 @@ import * as roleassign from './roleassign';
 import * as status from './status';
 import * as welcome from './welcome';
 
-const client = new Client();
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMembers,
+  ],
+});
 
 client.on('ready', async () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -17,7 +24,7 @@ client.on('ready', async () => {
   await interactive.onReady(client);
 });
 
-client.on('message', async (message: Message) => {
+client.on('messageCreate', async (message: Message) => {
   await ping.onMessage(message);
   await status.onMessage(message);
   await manpages.onMessage(message);

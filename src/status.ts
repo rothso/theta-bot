@@ -1,4 +1,4 @@
-import { Message, MessageEmbed } from 'discord.js';
+import { Message, EmbedBuilder } from 'discord.js';
 import * as child from 'child_process';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -31,20 +31,22 @@ export const onMessage = async (message: Message): Promise<void> => {
     const uptime = new Date(1000 * process.uptime()).toISOString().substr(11, 8);
     const build = child.execSync('git rev-parse --short HEAD').toString().trim();
 
-    await channel.send(
-      new MessageEmbed({
-        color: 38536,
-        description: `Hello from ${PRETTY_NAME} :wave:`,
-        fields: [
-          { name: 'Memory', value: memory, inline: true },
-          { name: 'Uptime', value: uptime },
-          { name: 'Build', value: build, inline: true },
-        ],
-        footer: {
-          ...(icon ? { icon_url: icon } : {}),
-          text: new Date().toLocaleString(),
-        },
-      }),
-    );
+    await channel.send({
+      embeds: [
+        new EmbedBuilder({
+          color: 38536,
+          description: `Hello from ${PRETTY_NAME} :wave:`,
+          fields: [
+            { name: 'Memory', value: memory, inline: true },
+            { name: 'Uptime', value: uptime },
+            { name: 'Build', value: build, inline: true },
+          ],
+          footer: {
+            ...(icon ? { icon_url: icon } : {}),
+            text: new Date().toLocaleString(),
+          },
+        }),
+      ],
+    });
   }
 };
