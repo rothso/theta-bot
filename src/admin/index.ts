@@ -22,8 +22,21 @@ export const onMessage = async (message: Message): Promise<void> => {
     }
 
     const command = content.substring('$ sudo '.length);
-    await elmo.onCommand(command, message);
-    await greatpurge.onCommand(command, message);
-    await channels.onCommand(command, message);
+
+    try {
+      await elmo.onCommand(command, message);
+      await greatpurge.onCommand(command, message);
+      await channels.onCommand(command, message);
+    } catch (err) {
+      console.error(err);
+
+      await channel.send({
+        embeds: [
+          new EmbedBuilder({
+            description: `🚫 Encountered an error.`,
+          }),
+        ],
+      });
+    }
   }
 };
