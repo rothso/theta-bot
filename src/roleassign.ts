@@ -30,8 +30,9 @@ const getMatchingRoles = (content: string): Role[] => {
 
 const assignRole = async (message: Message): Promise<void> => {
   const { content, reactions } = message;
-  // eslint-disable-next-line prefer-destructuring
-  const member = message.member;
+
+  // We may have to resolve the member if processing an old message
+  const member = message.member || (await message.guild.members.fetch(message.author.id));
 
   // Ignore messages from users who have left the server
   if (!member) return;
@@ -68,7 +69,7 @@ export const onReady = async (client: Client): Promise<void> => {
   await Promise.all(
     roleChannels.map((channel) =>
       channel.messages
-        .fetch({ limit: 100, cache: true })
+        .fetch({ limit: 20, cache: true })
         .then((messages) => Promise.all(messages.map((message) => assignRole(message)))),
     ),
   );
