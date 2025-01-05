@@ -1,4 +1,4 @@
-import { Message, EmbedBuilder } from 'discord.js';
+import { Message, EmbedBuilder, TextChannel } from 'discord.js';
 import config from 'tldr/lib/config';
 import Cache from 'tldr/lib/cache';
 import parser from 'tldr/lib/parser';
@@ -18,7 +18,8 @@ const getPage = async (command: string): Promise<Tldr.Page> => {
 };
 
 export const onMessage = async (message: Message): Promise<void> => {
-  const { channel, content } = message;
+  const { content } = message;
+  const channel: TextChannel = message.channel as TextChannel;
   const [match, command] = /^\$\s?man ([\w\s-]+)$/i.exec(content) || [];
 
   if (match) {

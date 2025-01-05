@@ -1,10 +1,10 @@
-import { Message, EmbedBuilder, PermissionsBitField } from 'discord.js';
+import { Message, EmbedBuilder, PermissionsBitField, TextChannel } from 'discord.js';
 import * as channels from './channels';
 import * as elmo from './elmo';
 import * as greatpurge from './greatpurge';
 
 export const onMessage = async (message: Message): Promise<void> => {
-  const { channel } = message;
+  const channel: TextChannel = message.channel as TextChannel;
   const content = message.content.trim();
   // eslint-disable-next-line prefer-destructuring
   const member = message.member;

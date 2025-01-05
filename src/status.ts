@@ -1,4 +1,4 @@
-import { Message, EmbedBuilder } from 'discord.js';
+import { Message, EmbedBuilder, TextChannel } from 'discord.js';
 import * as child from 'child_process';
 import dotenv from 'dotenv';
 import fs from 'fs';
@@ -10,7 +10,7 @@ const IMAGE_CLOUD = `${MEDIA_URL}/489175239830536206/788237877984362496/Google-C
 const IMAGE_LINUX = `${MEDIA_URL}/489175239830536206/579742025604268058/linux.png`;
 
 export const onMessage = async (message: Message): Promise<void> => {
-  const { channel, content } = message;
+  const { content } = message;
   const command = content.toLowerCase().trim();
 
   if (command === '$ status') {
@@ -31,7 +31,7 @@ export const onMessage = async (message: Message): Promise<void> => {
     const uptime = new Date(1000 * process.uptime()).toISOString().substr(11, 8);
     const build = child.execSync('git rev-parse --short HEAD').toString().trim();
 
-    await channel.send({
+    await (message.channel as TextChannel).send({
       embeds: [
         new EmbedBuilder({
           color: 38536,

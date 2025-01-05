@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import { Message, TextChannel } from 'discord.js';
 
 export const onMessage = async (message: Message): Promise<void> => {
   const content = message.content.toLowerCase().trim();
@@ -15,7 +15,7 @@ export const onMessage = async (message: Message): Promise<void> => {
       const reply = ['he', 'she'].includes(noun)
         ? `...${noun} a bot.`
         : "I'm only a bot, I can't tell gender :(";
-      await message.channel.send(reply);
+      await (message.channel as TextChannel).send(reply);
     }
   }
 };

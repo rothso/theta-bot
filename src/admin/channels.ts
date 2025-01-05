@@ -144,7 +144,7 @@ export const onCommand = async (command: string, message: Message): Promise<void
     const noChannels = missingChannels.map((role) => role.name).join('\n') || '*None*';
     const noRoles = missingRoles.map((course) => course.title).join('\n') || '*None*';
 
-    await message.channel.send({
+    await (message.channel as TextChannel).send({
       embeds: [
         new EmbedBuilder({
           title: `🪄  Server Mode: ${term}`,
@@ -186,7 +186,7 @@ export const onCommand = async (command: string, message: Message): Promise<void
       message.guild.channels.cache.get(CATEGORY_OFFICE_HOURS) as CategoryChannel,
     );
 
-    await message.channel.send({
+    await (message.channel as TextChannel).send({
       embeds: [
         new EmbedBuilder({
           title: `🪄  Server Mode: ${term}`,
@@ -208,7 +208,7 @@ export const onCommand = async (command: string, message: Message): Promise<void
 
     const updatedCount = await moveChannels([channel], category);
 
-    await message.channel.send({
+    await (message.channel as TextChannel).send({
       embeds: [
         new EmbedBuilder({
           description:
