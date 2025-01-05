@@ -49,12 +49,12 @@ const getStatistics = async (guild: Guild, term: string) => {
   const roleSet = new RoleSet(classRoles);
 
   const roleChannels = channels.cache
-    .filter((channel) => ['Office Hours', 'Archive'].includes(channel.parent?.name))
+    .filter((channel) => [CATEGORY_OFFICE_HOURS, CATEGORY_CLASS_ARCHIVE].includes(channel.parentId))
     .sort((a, b) => a.name.localeCompare(b.name))
     .map((channel) => ({
       channel: channel as TextChannel,
       role: roleSet.get(channel.name.replace(/[\W_]+/g, ' ').trim()),
-      isArchived: channel.parent?.name === 'Archive',
+      isArchived: channel.parentId === CATEGORY_CLASS_ARCHIVE,
     }))
     .filter((it) => it.role);
 
