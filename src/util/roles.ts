@@ -62,6 +62,7 @@ const roleAliases: Record<string, string> = {
   'Information Systems Senior Project': 'IS Senior Project',
   'Construction of Language Translators': 'Compilers',
   'Language Translators': 'Compilers',
+  COBOL: 'COBOL for FinTech',
 };
 
 export const getClassRoles = (roles: Collection<string, Role>): Role[] => {
